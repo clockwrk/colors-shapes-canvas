@@ -1,12 +1,14 @@
 let express = require('express'),
     path = require('path'),
     app = express(),
+    volleyball = require('volleyball'),
     port = process.env.PORT || 3000;
 
-app.use(express.static(path.join(__dirname, './browser')));
+app.use(volleyball);
+app.use(express.static('browser'));
 
-app.get('*', function(req, res) {
-  res.sendFile(path.join(__dirname, '../browser/', 'index.html'));
+app.get('/', function(req, res) {
+  res.sendFile(__dirname + '../browser/index.html');
 });
 
 app.listen(port);
