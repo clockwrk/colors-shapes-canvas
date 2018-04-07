@@ -19,6 +19,8 @@
       console.log([e.clientX, e.clientY])
       return [e.clientX, e.clientY];
     }
+    console.log('here');
+    
 
 resizeCanvas();
 })();
