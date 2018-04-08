@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/clockwrk/vanilla-javascript-portfolio/issues"
   },
-  "homepage": "https://github.com/clockwrk/vanilla-javascript-portfolio#readme"
+  "homepage": "https://github.com/clockwrk/vanilla-javascript-portfolio#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "path": "^0.12.7",
+    "volleyball": "^1.4.1"
+  }
 }
