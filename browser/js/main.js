@@ -110,7 +110,7 @@
     }
 
     function setSpeed() {
-      return 2*Math.floor(Math.random() * 4) + 1;
+      return 1.5*Math.floor(Math.random() * 6) + 1;
     }
 
 resizeCanvas();
