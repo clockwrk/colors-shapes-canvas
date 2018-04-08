@@ -1,96 +1,117 @@
 (function(){
   let canvas = document.getElementById("canvas-screen"),
-      context = canvas.getContext('2d'),
-      currentShape = 'triangle',
-      colorIndex = 0,
-      currentRainbowColor = 'red',
-      shapesArray = [];
+    m_canvas  = document.createElement('canvas'),
+    context = canvas.getContext('2d'),
+    m_context = m_canvas.getContext('2d'),
+    currentShape = 'triangle',
+    colorIndex = 0,
+    currentRainbowColor = 'violet',
+    shapesArray = [];
 
-    const rainbow =  ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'].reverse(),
-          length = 100;
+  const rainbow =  ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'].reverse(),
+        length = 100;
+
+  window.addEventListener('resize', resizeCanvas, false);
+  window.addEventListener('mousedown', createShape, false);
+
+  function Shape (type, x, y, color) {
+    this.type = type;
+    this.xPosition = x;
+    this.yPosition = y;
+    this.color = color;
+    this.speed = setSpeed();
+  }
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    m_canvas.width = canvas.width;
+    m_canvas.height = canvas.height;
+    draw();
+  }
+
+  function getPosition(e) {
+    return [e.clientX, e.clientY];
+  }
+
+  function nextShape() {
+    if(currentShape === 'circle') {
+      currentShape = 'square';
+    }else if(currentShape === 'square'){
+      currentShape = 'triangle';
+    }else{
+      currentShape = 'circle';
+    }
+  }
 
 
-    window.addEventListener('resize', resizeCanvas, false);
-    window.addEventListener('mousedown', createShape, false);
+  function createShape(e) {
+    let [xPosition, yPosition] = getPosition(e),
+        newShape = new Shape(currentShape, xPosition, yPosition, currentRainbowColor);
 
-    function Shape (type, x, y) {
-      this.type = type;
-      this.xPosition = x;
-      this.yPosition = y;
+    shapesArray.push(newShape);
+    changeColor();
+    nextShape();
+  }
+
+   function drawShape(shape) {
+     console.log(shape.type, 'is being passed in');
+     if(shape.type === 'circle') {
+       console.log('circle being created')
+       drawCircle(shape);
+     }else if(shape.type === 'square'){
+       console.log('square being created')
+       drawSquare(shape);
+     }else{
+       console.log('triangle being created')
+       drawTriangle(shape);
+     }
+   }
+
+    function drawCircle(shape) {
+      m_context.fillStyle = shape.color;
+      m_context.beginPath();
+      m_context.arc(shape.xPosition, shape.yPosition, length, 0, 2 * Math.PI, false);
+      m_context.fill();
     }
 
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      // drawCanvas();
+    function drawSquare(shape) {
+      m_context.fillStyle = shape.color;
+      m_context.fillRect(shape.xPosition - length, shape.yPosition - length, 2*length, 2*length);
     }
 
-    function getPosition(e) {
-      return [e.clientX, e.clientY];
-    }
-
-    function nextShape() {
-      if(currentShape === 'circle') {
-        currentShape = 'square';
-      }else if(currentShape === 'square'){
-        currentShape = 'triangle';
-      }else{
-        currentShape = 'circle';
-      }
-    }
-
-    function createShape(e) {
-      let [xPosition, yPosition] = getPosition(e),
-      newShape = new Shape(currentShape, xPosition, yPosition);
-      shapesArray.push(newShape);
-
-      drawShape(xPosition, yPosition);
-
-
-      console.log(shapesArray);
-      changeColor();
-      nextShape();
-    }
-
-    function drawShape(x,y) {
-      if(currentShape === 'circle') {
-        drawCircle(x,y);
-      }else if(currentShape === 'square'){
-        drawSquare(x,y);
-      }else{
-        drawTriangle(x,y);
-      }
-    }
-
-    function drawCircle(x, y) {
-      context.fillStyle = currentRainbowColor;
-      context.beginPath();
-      context.arc(x, y, length, 0, 2 * Math.PI, false);
-      context.fill();
-    }
-
-    function drawSquare(x, y) {
-      context.fillStyle = currentRainbowColor;
-      context.fillRect(x - length, y - length, 2*length, 2*length);
-    }
-
-    function drawTriangle(x, y) {
-      context.fillStyle = currentRainbowColor;
-      context.beginPath();
-      context.moveTo(x - length, y + 0.5 * (3/2.0) * length );
-      context.lineTo(x + length, y + 0.5 * (3/2.0) * length);
-      context.lineTo(x , y - 0.5 * (3/2.0) * length);
-      context.fill();
+    function drawTriangle(shape) {
+      m_context.fillStyle = shape.color;
+      m_context.beginPath();
+      m_context.moveTo(shape.xPosition - length, shape.yPosition + 0.5 * (3/2.0) * length );
+      m_context.lineTo(shape.xPosition + length, shape.yPosition + 0.5 * (3/2.0) * length);
+      m_context.lineTo(shape.xPosition , shape.yPosition - 0.5 * (3/2.0) * length);
+      m_context.fill();
     }
 
     function changeColor() {
       colorIndex += 1;
-      currentRainbowColor = rainbow[colorIndex % 7]
-
-
+      currentRainbowColor = rainbow[colorIndex % 7];
     }
 
+    function draw() {
+      m_context.clearRect(0, 0, canvas.width, canvas.height);
+      shapesArray.forEach((shape) => {
+        drawShape(shape);
+        shape.yPosition -= 3 * shape.speed;
+      });
 
+      shapesArray = shapesArray.filter((shape) =>(shape.yPosition > 0));
+
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(m_canvas, 0, 0,canvas.width, canvas.height);
+
+      window.requestAnimationFrame(draw);
+    }
+
+    function setSpeed() {
+      return 2*Math.floor(Math.random() * 6) + 1;
+    }
 
 resizeCanvas();
 })();
