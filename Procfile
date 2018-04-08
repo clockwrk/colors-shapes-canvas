@@ -1,2 +1,1 @@
-web: npm install
-web: node app.js
+web: node server/index.js
