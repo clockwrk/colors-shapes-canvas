@@ -7,12 +7,18 @@
     colorIndex = 0,
     currentRainbowColor = 'violet',
     shapesArray = [];
+    clickEvent = (function() {
+      if ('ontouchstart' in document.documentElement === true)
+        return 'touchstart';
+      else
+        return 'click';
+    })();
 
   const rainbow =  ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'].reverse(),
         length = 100;
 
   window.addEventListener('resize', resizeCanvas, false);
-  window.addEventListener('click', createShape, false);
+  window.addEventListener(clickEvent , createShape, false);
 
   function Shape (type, x, y, color) {
     this.type = type;
@@ -46,12 +52,15 @@
 
 
   function createShape(e) {
+
     let [xPosition, yPosition] = getPosition(e),
         newShape = new Shape(currentShape, xPosition, yPosition, currentRainbowColor);
 
     shapesArray.push(newShape);
     changeColor();
     nextShape();
+    e.stopPropagation();
+    e.preventDefault();
   }
 
    function drawShape(shape) {
