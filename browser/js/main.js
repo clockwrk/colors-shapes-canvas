@@ -108,7 +108,7 @@
 
     function changeColor() {
       colorIndex += 1;
-      currentRainbowColor = rainbow[colorIndex % 6];
+      currentRainbowColor = rainbow[colorIndex % 7];
     }
 
     function draw() {
