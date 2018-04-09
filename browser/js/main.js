@@ -20,9 +20,9 @@
   canvas.addEventListener('resize', resizeCanvas, false);
   canvas.addEventListener(clickEvent , createShape, false);
 
-  window.addEventListener("touchstart", cancelTouch, false);
-  window.addEventListener("touchcancel", cancelTouch, false);
-  window.addEventListener("touchmove", cancelTouch, false);
+  // window.addEventListener("touchstart", cancelTouch, false);
+  // window.addEventListener("touchcancel", cancelTouch, false);
+  // window.addEventListener("touchmove", cancelTouch, false);
 
   function cancelTouch(e) {
      e.preventDefault();
