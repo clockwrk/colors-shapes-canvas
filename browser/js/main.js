@@ -5,7 +5,7 @@
     m_context = m_canvas.getContext('2d'),
     currentShape = 'triangle',
     colorIndex = 0,
-    currentRainbowColor = 'violet',
+    currentRainbowColor = 'rgba(118,0,137,0.5)',
     shapesArray = [];
     clickEvent = (function() {
       if ('touchend' in document.documentElement === true)
@@ -14,11 +14,20 @@
         return 'click';
     })();
 
-  const rainbow =  ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'].reverse(),
+  const rainbow =  ['rgba(231, 0, 0, 0.5)', 'rgba(255, 140, 0, 0.5)', 'rgba(255, 239, 0, 0.5)', 'rgba(0, 129, 31, 0.5)', 'rgba(0, 68, 255, 0.5)', 'rgba(118, 0, 137, 0.5)'].reverse(),
         length = 50;
 
   canvas.addEventListener('resize', resizeCanvas, false);
   canvas.addEventListener(clickEvent , createShape, false);
+
+  window.addEventListener("touchstart", cancelTouch, false);
+  window.addEventListener("touchcancel", cancelTouch, false);
+  window.addEventListener("touchmove", cancelTouch, false);
+
+  function cancelTouch(e) {
+     e.preventDefault();
+      e.stopPropagation();
+  }
 
   function Shape (type, x, y, color) {
     this.type = type;
@@ -99,7 +108,7 @@
 
     function changeColor() {
       colorIndex += 1;
-      currentRainbowColor = rainbow[colorIndex % 7];
+      currentRainbowColor = rainbow[colorIndex % 6];
     }
 
     function draw() {
@@ -109,7 +118,7 @@
         shape.yPosition -= shape.speed;
       });
 
-      shapesArray = shapesArray.filter((shape) =>(shape.yPosition > 0));
+      shapesArray = shapesArray.filter((shape) =>(shape.yPosition > 0 - length));
 
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.drawImage(m_canvas, 0, 0,canvas.width, canvas.height);
@@ -118,7 +127,7 @@
     }
 
     function setSpeed() {
-      return 1.5*Math.floor(Math.random() * 6) + 1;
+      return 1.25*Math.floor(Math.random() * 4) + 1;
     }
 
 resizeCanvas();
