@@ -12,5 +12,5 @@ Getting Started
 2. `cd colors-shapes-canvas`
 3. `npm install`
 4. `npm start`
-5. Open browser window to "http://localhost:3000/"
+5. Open browser window to http://localhost:3000/
 6. Click around the screen to see the animation loop in action
