@@ -68,7 +68,6 @@
     shapesArray.push(newShape);
     changeColor();
     nextShape();
-
   }
 
    function drawShape(shape) {
@@ -108,7 +107,7 @@
 
     function changeColor() {
       colorIndex += 1;
-      currentRainbowColor = rainbow[colorIndex % 7];
+      currentRainbowColor = rainbow[colorIndex % 6];
     }
 
     function draw() {
